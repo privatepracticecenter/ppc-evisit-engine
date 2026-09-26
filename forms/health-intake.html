@@ -44,8 +44,82 @@
         <textarea id="clinical-notes" name="clinicalNotes" rows="3" required></textarea>
       </div>
 
+      <div class="identity-block">
+        <h3>Identity Verification</h3>
+        <p class="subtext">Upload a clear photo of your government-issued ID for verification.</p>
+
+        <div class="form-group">
+          <label for="id-upload">Government ID Photo *</label>
+          <input type="file" id="id-upload" name="idPhoto" accept="image/*,.pdf" required>
+        </div>
+      </div>
+
+      <div class="attestation-block">
+        <h3>Attestation & Consent</h3>
+
+        <div class="form-group checkbox-group">
+          <label for="attest-truth">
+            <input type="checkbox" id="attest-truth" name="attestTruth" required>
+            I attest that all information provided is accurate and truthful to the best of my knowledge.
+          </label>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label for="attest-terms">
+            <input type="checkbox" id="attest-terms" name="attestTerms" required>
+            I understand that submission does not guarantee approval and that review fees are non-refundable once evaluated.
+          </label>
+        </div>
+      </div>
+
       <button type="submit" class="submit-btn">Submit Request →</button>
     </form>
   </div>
+
+  <script type="module">
+    import { submitIntake } from '../engine/route-intake.js';
+
+    const form = document.getElementById('health-form');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = {
+        clientName: formData.get('clientName'),
+        clientEmail: formData.get('clientEmail'),
+        clientDob: formData.get('clientDob'),
+        answers: {
+          serviceType: formData.get('serviceType'),
+          clinicalNotes: formData.get('clinicalNotes'),
+          idPhoto: formData.get('idPhoto')
+        },
+        attestations: {
+          attestTruth: formData.get('attestTruth') === 'on',
+          attestTerms: formData.get('attestTerms') === 'on'
+        }
+      };
+
+      const config = {
+        memberId: 'HEALTH-001',
+        vertical: 'HEALTH',
+        googleVaultUrl: 'https://script.google.com/macros/d/YOUR_DEPLOYMENT_ID/usercontent',
+        supabaseLedgerUrl: 'https://YOUR_SUPABASE_URL/rest/v1/requests'
+      };
+
+      try {
+        const result = await submitIntake(data, config);
+        if (result.success) {
+          alert(`✓ Submission successful!\nRequest ID: ${result.requestId}`);
+          form.reset();
+        } else {
+          alert(`✗ Submission failed: ${result.error}`);
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
+        alert('An error occurred during submission.');
+      }
+    });
+  </script>
 </body>
 </html>
