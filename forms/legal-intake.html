@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Legal Works - E-Consult Intake</title>
+  <title>Legal Works - E-Visit Intake</title>
   <link rel="stylesheet" href="../styles/platform-theme.css">
 </head>
 <body>
   <div class="intake-container">
     <header class="intake-header">
       <h2>Legal Works Intake</h2>
-      <p class="price-tag">Initial Review: $99 Deposit</p>
+      <p class="price-tag">Pilot Rate: $99 (Standard $150)</p>
     </header>
 
     <form id="legal-form">
@@ -20,32 +20,119 @@
       </div>
 
       <div class="form-group">
+        <label for="client-dob">Date of Birth *</label>
+        <input type="date" id="client-dob" name="clientDob" required>
+      </div>
+
+      <div class="form-group">
         <label for="client-email">Email Address *</label>
         <input type="email" id="client-email" name="clientEmail" required>
       </div>
 
       <div class="form-group">
-        <label for="adverse-parties">Opposing Party / Conflict Check Names</label>
-        <input type="text" id="adverse-parties" name="adverseParties" placeholder="Names of other parties involved">
-      </div>
-
-      <div class="form-group">
-        <label for="service-type">Matter Type *</label>
-        <select id="service-type" name="serviceType" required>
+        <label for="matter-type">Matter Type / Document Request *</label>
+        <select id="matter-type" name="matterType" required>
           <option value="contract-review">Contract / Document Review ($99)</option>
           <option value="demand-letter">Demand / Formal Notice Request ($99)</option>
           <option value="business-formation">Entity Formation Consultation ($99)</option>
+          <option value="employment-letter">Employment / Reference Letter Request ($99)</option>
           <option value="general-consult">General Advisory Review ($99)</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label for="matter-summary">Brief Description of Matter *</label>
-        <textarea id="matter-summary" name="matterSummary" rows="3" required></textarea>
+        <label for="matter-context">Matter Context / Background *</label>
+        <textarea id="matter-context" name="matterContext" rows="4" placeholder="Describe the legal matter, context, or circumstances requiring this document..." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="jurisdiction">Relevant Jurisdiction *</label>
+        <input type="text" id="jurisdiction" name="jurisdiction" placeholder="e.g., California, Federal, International" required>
+      </div>
+
+      <div class="form-group">
+        <label for="supporting-docs">Supporting Documents (if available)</label>
+        <input type="file" id="supporting-docs" name="supportingDocs" accept=".pdf,.doc,.docx,.txt" multiple>
+      </div>
+
+      <div class="identity-block">
+        <h3>Identity Verification</h3>
+        <p class="subtext">Upload a clear photo of your government-issued ID for verification.</p>
+
+        <div class="form-group">
+          <label for="id-upload">Government ID Photo *</label>
+          <input type="file" id="id-upload" name="idPhoto" accept="image/*,.pdf" required>
+        </div>
+      </div>
+
+      <div class="attestation-block">
+        <h3>Attestation & Consent</h3>
+
+        <div class="form-group checkbox-group">
+          <label for="attest-truth">
+            <input type="checkbox" id="attest-truth" name="attestTruth" required>
+            I attest that all information provided is accurate and truthful to the best of my knowledge.
+          </label>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label for="attest-terms">
+            <input type="checkbox" id="attest-terms" name="attestTerms" required>
+            I understand that submission does not guarantee approval and that review fees are non-refundable once evaluated.
+          </label>
+        </div>
       </div>
 
       <button type="submit" class="submit-btn">Submit Matter →</button>
     </form>
   </div>
+
+  <script type="module">
+    import { submitIntake } from '../engine/route-intake.js';
+
+    const form = document.getElementById('legal-form');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = {
+        clientName: formData.get('clientName'),
+        clientEmail: formData.get('clientEmail'),
+        clientDob: formData.get('clientDob'),
+        answers: {
+          matterType: formData.get('matterType'),
+          matterContext: formData.get('matterContext'),
+          jurisdiction: formData.get('jurisdiction'),
+          supportingDocs: formData.get('supportingDocs'),
+          idPhoto: formData.get('idPhoto')
+        },
+        attestations: {
+          attestTruth: formData.get('attestTruth') === 'on',
+          attestTerms: formData.get('attestTerms') === 'on'
+        }
+      };
+
+      const config = {
+        memberId: 'LEGAL-001',
+        vertical: 'LEGAL',
+        googleVaultUrl: 'https://script.google.com/macros/d/YOUR_DEPLOYMENT_ID/usercontent',
+        supabaseLedgerUrl: 'https://YOUR_SUPABASE_URL/rest/v1/requests'
+      };
+
+      try {
+        const result = await submitIntake(data, config);
+        if (result.success) {
+          alert(`✓ Submission successful!\nRequest ID: ${result.requestId}`);
+          form.reset();
+        } else {
+          alert(`✗ Submission failed: ${result.error}`);
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
+        alert('An error occurred during submission.');
+      }
+    });
+  </script>
 </body>
 </html>
