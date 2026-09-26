@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Works - Intake & Review</title>
+  <link rel="stylesheet" href="../styles/platform-theme.css">
+</head>
+<body>
+  <div class="intake-container">
+    <header class="intake-header">
+      <h2>Finance Works Intake</h2>
+      <p class="price-tag">Initial Review: $99 Deposit</p>
+    </header>
+
+    <form id="finance-form">
+      <div class="form-group">
+        <label for="client-name">Full Name / Entity Name *</label>
+        <input type="text" id="client-name" name="clientName" required>
+      </div>
+
+      <div class="form-group">
+        <label for="client-email">Email Address *</label>
+        <input type="email" id="client-email" name="clientEmail" required>
+      </div>
+
+      <div class="form-group">
+        <label for="tax-id-type">Filing Structure *</label>
+        <select id="tax-id-type" name="taxIdType" required>
+          <option value="individual-1040">Individual (1040 / W-2 / 1099)</option>
+          <option value="single-llc">Single-Member LLC / Schedule C</option>
+          <option value="s-corp">S-Corporation / Partnership (1120S / 1065)</option>
+          <option value="non-profit">Non-Profit / Tax Exempt (990)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="service-type">Requested Service *</label>
+        <select id="service-type" name="serviceType" required>
+          <option value="tax-filing-review">Tax Return Review & Advisory ($99)</option>
+          <option value="financial-attestation">Proof of Income / CPA Letter ($99)</option>
+          <option value="bookkeeping-audit">Bookkeeping Review ($99)</option>
+          <option value="general-consult">Financial Advisory Review ($99)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="financial-summary">Brief Summary of Request *</label>
+        <textarea id="financial-summary" name="financialSummary" rows="3" required></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Financial Request →</button>
+    </form>
+  </div>
+</body>
+</html>
