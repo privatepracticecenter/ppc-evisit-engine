@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legal Works - E-Consult Intake</title>
+  <link rel="stylesheet" href="../styles/platform-theme.css">
+</head>
+<body>
+  <div class="intake-container">
+    <header class="intake-header">
+      <h2>Legal Works Intake</h2>
+      <p class="price-tag">Initial Review: $99 Deposit</p>
+    </header>
+
+    <form id="legal-form">
+      <div class="form-group">
+        <label for="client-name">Full Legal Name *</label>
+        <input type="text" id="client-name" name="clientName" required>
+      </div>
+
+      <div class="form-group">
+        <label for="client-email">Email Address *</label>
+        <input type="email" id="client-email" name="clientEmail" required>
+      </div>
+
+      <div class="form-group">
+        <label for="adverse-parties">Opposing Party / Conflict Check Names</label>
+        <input type="text" id="adverse-parties" name="adverseParties" placeholder="Names of other parties involved">
+      </div>
+
+      <div class="form-group">
+        <label for="service-type">Matter Type *</label>
+        <select id="service-type" name="serviceType" required>
+          <option value="contract-review">Contract / Document Review ($99)</option>
+          <option value="demand-letter">Demand / Formal Notice Request ($99)</option>
+          <option value="business-formation">Entity Formation Consultation ($99)</option>
+          <option value="general-consult">General Advisory Review ($99)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="matter-summary">Brief Description of Matter *</label>
+        <textarea id="matter-summary" name="matterSummary" rows="3" required></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Matter →</button>
+    </form>
+  </div>
+</body>
+</html>
