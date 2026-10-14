@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Works Connect™ App Hub - Letter Works™ Widget</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* UNIVERSAL THEME VARIABLES */
+    :root {
+      --bg-desk: #EAE6DF;
+      --paper-white: #FBFBFA;
+      --swiss-coffee: #F1EFE9;
+      --ink-charcoal: #2D2B27;
+      --ink-muted: #6E695F;
+      --border-line: #D5D1C7;
+      --gold-accent: #C5A059;
+      --gold-accent-10: rgba(197, 160, 89, 0.10);
+      --gold-accent-20: rgba(197, 160, 89, 0.22);
+      --green-status: #2E7D32;
+      --green-status-bg: #E8F5E9;
+      --amber-status: #C67D00;
+      --amber-status-bg: #FFF8E1;
+    }
+
+    /* LOCKED TOUCH-OPTIMIZED VIEWPORT RULES */
+    * {
+      box-sizing: border-box;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-desk);
+      color: var(--ink-charcoal);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* 100vh PORTRAIT APP SHELL (LOCKED MOBILE CONTAINER) */
+    .app-shell {
+      width: 100%;
+      max-width: 430px;
+      height: 100vh;
+      background-color: var(--swiss-coffee);
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--border-line);
+      border-right: 1px solid var(--border-line);
+      position: relative;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    }
+
+    /* LOCKED HEADER BAR */
+    .app-header {
+      height: 62px;
+      background-color: var(--paper-white);
+      border-bottom: 1px solid var(--border-line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      flex-shrink: 0;
+      z-index: 5;
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink-charcoal);
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-title span.badge {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      background: var(--gold-accent-10);
+      color: var(--gold-accent);
+      border: 1px solid var(--gold-accent);
+      padding: 2px 6px;
+      border-radius: 10px;
+      text-transform: uppercase;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-pill {
+      background: var(--paper-white);
+      border: 1px solid var(--border-line);
+      color: var(--ink-charcoal);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-pill:active {
+      transform: scale(0.96);
+      background: var(--swiss-coffee);
+    }
+
+    .btn-pill.primary {
+      background: var(--gold-accent-10);
+      border-color: var(--gold-accent);
+      color: var(--ink-charcoal);
+    }
+
+    .btn-pill.dark {
+      background: var(--ink-charcoal);
+      border-color: var(--ink-charcoal);
+      color: var(--paper-white);
+    }
+
+    /* VIEWPORT MODE NAVIGATION BAR */
+    .view-toggle-bar {
+      display: flex;
+      background: var(--swiss-coffee);
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-line);
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 7px 0;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--ink-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .toggle-btn.active {
+      background: var(--paper-white);
+      border-color: var(--border-line);
+      color: var(--ink-charcoal);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .badge-count {
+      background: var(--gold-accent);
+      color: var(--paper-white);
+      font-size: 0.65rem;
+      padding: 1px 5px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    /* SCROLLABLE MID PANEL */
+    .app-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scroll-behavior: smooth;
+    }
+
+    /* CARDS & FORM GROUPS */
+    .card {
+      background: var(--paper-white);
+      border: 1px solid var(--border-line);
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .field-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .field-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .field-input, .field-select, .field-textarea {
+      background: var(--swiss-coffee);
+      border: 1px solid var(--border-line);
+      border-radius: 8px;
+      padding: 9px 11px;
+      font-size: 0.82rem;
+      color: var(--ink-charcoal);
+      outline: none;
+      -webkit-user-select: text;
+      user-select: text;
+      font-family: inherit;
+      width: 100%;
+      transition: border-color 0.15s ease;
+    }
+
+    .field-input:focus, .field-select:focus, .field-textarea:focus {
+      border-color: var(--gold-accent);
+      background: var(--paper-white);
+    }
+
+    .field-textarea {
+      min-height: 140px;
+      resize: none;
+      line-height: 1.5;
+    }
+
+    /* INLINE TOOLBAR */
+    .formatting-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--paper-white);
+      border: 1px solid var(--border-line);
+      border-radius: 8px;
+      padding: 4px 8px;
+      margin-bottom: -2px;
+    }
+
+    .format-tools {
+      display: flex;
+      gap: 4px;
+    }
+
+    .fmt-btn {
+      background: none;
+      border: none;
+      font-size: 0.82rem;
+      padding: 4px 8px;
+      color: var(--ink-charcoal);
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .fmt-btn:active, .fmt-btn.active {
+      background: var(--swiss-coffee);
+      color: var(--gold-accent);
+    }
+
+    .ai-assist-trigger {
+      background: var(--gold-accent-10);
+      border: 1px solid var(--gold-accent);
+      border-radius: 14px;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--ink-charcoal);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .ai-assist-trigger:active {
+      background: var(--gold-accent-20);
+    }
+
+    /* DOCUMENT PREVIEW AGED PAPER SHEET */
+    .document-sheet {
+      background: var(--paper-white);
+      border: 1px solid var(--border-line);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      padding: 24px 20px;
+      min-height: 440px;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .document-sheet::before {
+      content: "AGED SWISS COTTON PAPER • 24LB";
+      position: absolute;
+      top: 6px;
+      right: 12px;
+      font-size: 0.55rem;
+      color: var(--border-line);
+      letter-spacing: 0.1em;
+    }
+
+    .doc-header {
+      border-bottom: 2px solid var(--gold-accent);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .doc-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ink-charcoal);
+      line-height: 1.2;
+    }
+
+    .doc-meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.73rem;
+      color: var(--ink-muted);
+      margin-top: 6px;
+    }
+
+    .doc-body {
+      font-size: 0.82rem;
+      line-height: 1.65;
+      color: var(--ink-charcoal);
+      flex: 1;
+      white-space: pre-wrap;
+      padding: 8px 0;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    .doc-footer {
+      margin-top: 20px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border-line);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .doc-signature {
+      font-size: 0.75rem;
+      color: var(--ink-charcoal);
+      line-height: 1.4;
+    }
+
+    .doc-seal {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--gold-accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: var(--gold-accent);
+      text-align: center;
+      padding: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transform: rotate(-8deg);
+      background: var(--gold-accent-10);
+    }
+
+    /* 11-MONTH RENEWAL QUEUE STYLES */
+    .renewal-item {
+      background: var(--paper-white);
+      border: 1px solid var(--border-line);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .renewal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .client-name {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--ink-charcoal);
+    }
+
+    .doc-type-pill {
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: var(--swiss-coffee);
+      color: var(--ink-muted);
+      border: 1px solid var(--border-line);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+
+    .status-pill.amber {
+      background: var(--amber-status-bg);
+      color: var(--amber-status);
+      border: 1px solid var(--amber-status);
+    }
+
+    .status-pill.green {
+      background: var(--green-status-bg);
+      color: var(--green-status);
+      border: 1px solid var(--green-status);
+    }
+
+    .promo-banner {
+      background: var(--gold-accent-10);
+      border: 1px dashed var(--gold-accent);
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.72rem;
+    }
+
+    /* FLOATING AI POPOVER */
+    .ai-popover {
+      position: absolute;
+      top: 120px;
+      left: 14px;
+      right: 14px;
+      background: var(--paper-white);
+      border: 1px solid var(--gold-accent);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      z-index: 20;
+      display: none;
+      animation: popIn 0.2s ease-out;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .ai-popover.visible {
+      display: block;
+    }
+
+    /* NOTIFICATION TOAST POPOVER */
+    .toast-notification {
+      position: absolute;
+      bottom: 75px;
+      left: 14px;
+      right: 14px;
+      background: var(--ink-charcoal);
+      color: var(--paper-white);
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 30;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .toast-notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* PERSISTENT BOTTOM TAB BAR */
+    .app-tabbar {
+      height: 62px;
+      background-color: var(--paper-white);
+      border-top: 1px solid var(--border-line);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-shrink: 0;
+      padding-bottom: env(safe-area-inset-bottom);
+      z-index: 5;
+    }
+
+    .tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.65rem;
+      color: var(--ink-muted);
+      border: none;
+      background: none;
+      cursor: pointer;
+      width: 25%;
+      padding: 6px 0;
+    }
+
+    .tab-item svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: var(--ink-muted);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .tab-item.active {
+      color: var(--ink-charcoal);
+      font-weight: 700;
+    }
+
+    .tab-item.active svg {
+      stroke: var(--ink-charcoal);
+      stroke-width: 2.2;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- NOTIFICATION TOAST SIMULATING LAYER 1 API RESPONSET -->
+  <div class="toast-notification" id="toast">
+    <span id="toast-message">Telnyx Action Dispatched Successfully</span>
+    <span style="color:var(--gold-accent); cursor:pointer; font-weight:bold;" onclick="hideToast()">OK</span>
+  </div>
+
+  <!-- LOCKED APP HEADER -->
+  <header class="app-header">
+    <div class="brand-title">
+      Letter Works™ Desk
+      <span class="badge">Hub</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn-pill" id="btn-fax-self" onclick="dispatchFaxToSelf()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+        Fax Self
+      </button>
+      <button class="btn-pill primary" onclick="dispatchSendAndInvoice()">
+        Send
+      </button>
+    </div>
+  </header>
+
+  <!-- VIEWPORT MODE NAVIGATION BAR -->
+  <div class="view-toggle-bar">
+    <button class="toggle-btn active" id="tab-editor" onclick="switchMode('editor')">
+      Editor Mode
+    </button>
+    <button class="toggle-btn" id="tab-preview" onclick="switchMode('preview')">
+      Document Preview
+    </button>
+    <button class="toggle-btn" id="tab-queue" onclick="switchMode('queue')">
+      11-Mo Queue <span class="badge-count" id="queue-count">3</span>
+    </button>
+  </div>
+
+  <!-- FLOATING AI POPOVER TOOLTIP -->
+  <div class="ai-popover" id="ai-popover">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <strong style="font-size: 0.82rem; color: var(--ink-charcoal); display: flex; align-items: center; gap: 4px;">
+        ✨ AI Letter Works™ Assistant
+      </strong>
+      <span style="cursor: pointer; font-size: 0.9rem; color: var(--ink-muted);" onclick="toggleAI(false)">✕</span>
+    </div>
+    <p style="font-size: 0.74rem; color: var(--ink-muted); line-height: 1.45; margin-bottom: 12px;">
+      Refine tone, enforce compliance language for education or legal standards, and structure letter bodies automatically.
+    </p>
+    <div style="display: flex; gap: 6px;">
+      <button class="btn-pill primary" style="flex:1; justify-content: center;" onclick="runAIEnhance('formal')">Refine Legal/Formal</button>
+      <button class="btn-pill dark" style="flex:1; justify-content: center;" onclick="runAIEnhance('concise')">Make Concise</button>
+    </div>
+  </div>
+
+  <!-- SCROLLABLE MID WORKSPACE PANEL -->
+  <main class="app-content">
+
+    <!-- VIEW 1: EDITOR MODE -->
+    <div id="mode-editor" style="display: flex; flex-direction: column; gap: 12px;">
+
+      <!-- Specialty & Legal Module Selector Card -->
+      <div class="card">
+        <div class="field-group">
+          <label class="field-label">
+            <span>Agreement & Legal Document Module</span>
+            <span style="color:var(--gold-accent);">Decoupled Engine</span>
+          </label>
+          <select class="field-select" id="select-specialty" onchange="loadSpecialtyPreset(this.value)">
+            <option value="renewal">Yearly Renewal Letter (11-Month $50 Promo)</option>
+            <option value="consent">Informed Consent & Financial Disclosure</option>
+            <option value="terms">Master Service Terms & Conditions</option>
+            <option value="rental">Rental Agreement & Lease Extension</option>
+            <option value="privacy">Privacy Policy & HIPAA Compliance Disclosure</option>
+            <option value="education">Education Dept Accommodations (IEP / 504 Plan)</option>
+            <option value="legal">Legal Compliance & Annual Client Retainer</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Letter Form Inputs Card -->
+      <div class="card">
+        <div class="field-group">
+          <label class="field-label">Subject / Agreement Title</label>
+          <input type="text" class="field-input" id="input-subject" value="Annual Service & Documentation Renewal Notice ($50 Promo)" oninput="syncPreview()">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Recipient Fax Number / Email / Party</label>
+          <input type="text" class="field-input" id="input-recipient" value="Client / Tenant Records (Fax: 929-668-3330)" oninput="syncPreview()">
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <div class="field-group" style="flex:1;">
+            <label class="field-label">Effective Date</label>
+            <input type="text" class="field-input" id="input-effective-date" value="October 14, 2026" readonly>
+          </div>
+          <div class="field-group" style="flex:1;">
+            <label class="field-label">Annual Expiration</label>
+            <input type="text" class="field-input" id="input-expiration-date" value="September 14, 2027" readonly style="color:var(--amber-status); font-weight:600;">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Business Ending / Sign-off Header</label>
+          <select class="field-select" id="select-signoff" onchange="updateSignoff(this.value)">
+            <option value="renewal">Works Connect™ Client Services & Renewal Engine</option>
+            <option value="legal">Private Legal Practice & Compliance Counsel</option>
+            <option value="rental">Property Management & Leasing Office</option>
+            <option value="clinical">Private Practice Center of NY | Compliance Office</option>
+            <option value="ed">Educational & Clinical Advocacy Services</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Rich Body & AI Toolbar Card -->
+      <div class="card">
+        <div class="formatting-bar">
+          <div class="format-tools">
+            <button class="fmt-btn" onclick="formatText('bold')">B</button>
+            <button class="fmt-btn" onclick="formatText('italic')"><i>I</i></button>
+            <button class="fmt-btn" onclick="formatText('underline')"><u>U</u></button>
+          </div>
+          <button class="ai-assist-trigger" onclick="toggleAI(true)">
+            ✨ AI Assistant
+          </button>
+        </div>
+
+        <div class="field-group" style="margin-top: 8px;">
+          <label class="field-label">Agreement Body Text</label>
+          <textarea class="field-textarea" id="input-body" oninput="syncPreview()">Your annual documentation and service agreement is set to expire in 30 days. To prevent any service interruption, please complete our brief asynchronous renewal questionnaire. Complete your annual renewal today at a special promotional rate of $50.00.</textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VIEW 2: DOCUMENT PREVIEW (AGED SWISS COFFEE COTTON PAPER) -->
+    <div id="mode-preview" style="display: none;">
+      <div class="document-sheet">
+        <div>
+          <div class="doc-header">
+            <h2 class="doc-title" id="prev-subject">Annual Service & Documentation Renewal Notice ($50 Promo)</h2>
+            <div class="doc-meta-row">
+              <span id="prev-recipient">To: Client / Tenant Records</span>
+              <span id="prev-date">Date: Oct 14, 2026</span>
+            </div>
+            <div class="doc-meta-row" style="margin-top: 2px;">
+              <span>Ref ID: WC-2026-8839</span>
+              <span style="color:var(--amber-status); font-weight:600;">Valid Thru: Sep 14, 2027</span>
+            </div>
+          </div>
+
+          <div class="doc-body" id="prev-body"></div>
+        </div>
+
+        <div class="doc-footer">
+          <div class="doc-signature" id="prev-signoff-block">
+            <strong>Sharon DeJesus, NP, PMHNP</strong><br>
+            Works Connect™ Client Services & Renewal Engine<br>
+            License #123456 | NPI #9988776655
+          </div>
+          <div class="doc-seal">
+            OFFICIAL<br>ANNUAL<br>SEAL
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: 11-MONTH ASYNCHRONOUS RENEWAL QUEUE -->
+    <div id="mode-queue" style="display: none;">
+      
+      <div class="card" style="background: var(--gold-accent-10); border-color: var(--gold-accent); margin-bottom: 4px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="font-size:0.82rem; color:var(--ink-charcoal);">11-Mo Asynchronous Renewal Engine</strong>
+            <p style="font-size:0.72rem; color:var(--ink-muted); margin-top:2px;">
+              Auto-flags annual paperwork expiring in 30 days. Triggers $50 promo intake forms.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 1: Yearly Renewal Letter -->
+      <div class="renewal-item">
+        <div class="renewal-header">
+          <div>
+            <div class="client-name">Marcus Vance (Annual Documentation)</div>
+            <div class="doc-type-pill" style="margin-top:2px;">Yearly Renewal Letter ($50 Promo)</div>
+          </div>
+          <span class="status-pill amber">11 Mo Limit</span>
+        </div>
+        <div style="font-size:0.75rem; color:var(--ink-muted);">
+          Issued: Nov 18, 2025 • Expiring in 28 Days
+        </div>
+        <div class="promo-banner">
+          <span>Renewal Offer: <strong>$50 Promo Code</strong></span>
+          <button class="btn-pill dark" onclick="triggerAsynchronousForm('Marcus Vance', '$50')">
+            Send Async Form
+          </button>
+        </div>
+      </div>
+
+      <!-- Item 2: Rental Lease Extension -->
+      <div class="renewal-item">
+        <div class="renewal-header">
+          <div>
+            <div class="client-name">Apex Global Logistics (Suite 402)</div>
+            <div class="doc-type-pill" style="margin-top:2px;">Commercial Rental Agreement / Extension</div>
+          </div>
+          <span class="status-pill amber">11 Mo Limit</span>
+        </div>
+        <div style="font-size:0.75rem; color:var(--ink-muted);">
+          Issued: Nov 02, 2025 • Expiring in 14 Days
+        </div>
+        <div class="promo-banner">
+          <span>Renewal Offer: <strong>$50 Admin Fee Waiver</strong></span>
+          <button class="btn-pill dark" onclick="triggerAsynchronousForm('Apex Global', '$50')">
+            Send Async Form
+          </button>
+        </div>
+      </div>
+
+      <!-- Item 3: Informed Consent & Disclosure -->
+      <div class="renewal-item">
+        <div class="renewal-header">
+          <div>
+            <div class="client-name">Elena Rostova</div>
+            <div class="doc-type-pill" style="margin-top:2px;">Informed Consent & Privacy Policy</div>
+          </div>
+          <span class="status-pill green">Form Completed</span>
+        </div>
+        <div style="font-size:0.75rem; color:var(--ink-muted);">
+          Async Intake Form Submitted • Paid $50 via Invoice Link
+        </div>
+        <button class="btn-pill primary" style="width:100%; justify-content:center; margin-top:2px;" onclick="autoReissueLetter('Elena Rostova')">
+          Review & One-Click Re-Issue Document
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- PERSISTENT BOTTOM TAB BAR -->
+  <nav class="app-tabbar">
+    <button class="tab-item" onclick="switchMode('editor')">
+      <svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Recent
+    </button>
+    <button class="tab-item" onclick="dispatchFaxToSelf()">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Fax Desk
+    </button>
+    <button class="tab-item active" onclick="switchMode('editor')">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Letter Works
+    </button>
+    <button class="tab-item" onclick="dispatchSendAndInvoice()">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      Invoices
+    </button>
+  </nav>
+
+</div>
+
+<script>
+  // DYNAMIC PRESETS DATA STORE
+  const SPECIALTY_PRESETS = {
+    renewal: {
+      subject: "Annual Service & Documentation Renewal Notice ($50 Promo)",
+      recipient: "Client / Patient Records (Fax: 929-668-3330)",
+      signoff: "renewal",
+      body: "Your annual documentation and service agreement is set to expire in 30 days. To prevent any service interruption, please complete our brief asynchronous renewal questionnaire. Complete your annual renewal today at a special promotional rate of $50.00."
+    },
+    consent: {
+      subject: "Patient/Client Informed Consent & Financial Disclosure",
+      recipient: "Client Operations & Records (Fax: 929-668-3330)",
+      signoff: "clinical",
+      body: "I hereby acknowledge receipt of and provide informed consent for services provided. I acknowledge full financial disclosure of fee structures, including the annual administrative renewal fee of $50.00 due upon 11-month review."
+    },
+    terms: {
+      subject: "Master Service Terms & Conditions Agreement",
+      recipient: "All Active Client & Subscriber Accounts",
+      signoff: "legal",
+      body: "This Master Service Terms & Conditions Agreement governs the relationship between provider and client. Service authorizations remain valid for a period of 12 months from execution and are subject to annual asynchronous renewal."
+    },
+    rental: {
+      subject: "Commercial / Residential Rental Agreement & Lease Extension",
+      recipient: "Tenant Records & Property Management Desk (Fax: 929-668-3330)",
+      signoff: "rental",
+      body: "This agreement confirms lease parameters and terms for the subject premises. Landlord and Tenant agree to a 12-month term with an 11-month asynchronous renewal notice window, offering early extension options at promotional processing rates."
+    },
+    privacy: {
+      subject: "Privacy Policy & Data Protection / HIPAA Disclosure",
+      recipient: "Compliance Officer & Data Protection Desk",
+      signoff: "legal",
+      body: "We are committed to maintaining strict privacy, confidentiality, and data security standards under HIPAA and applicable privacy laws. Protected health information (PHI) and client records are stored securely and encrypted."
+    },
+    education: {
+      subject: "Annual Educational Accommodation Request (504 Plan)",
+      recipient: "Dept of Education - Accommodations Division (Fax: 929-668-3330)",
+      signoff: "ed",
+      body: "This letter serves as formal clinical documentation supporting educational accommodations under Section 504 for the student. Based on annual evaluation, it is recommended that extra testing time, quiet environment seating, and assistive technology access be provided for the 2026-2027 academic year."
+    },
+    legal: {
+      subject: "Annual Legal Compliance Statement & Retainer Renewal",
+      recipient: "Corporate Compliance Division - Client Records (Fax: 929-668-3330)",
+      signoff: "legal",
+      body: "Please accept this annual legal compliance review statement as required under client representation guidelines. All corporate disclosures and annual regulatory filings have been verified for the upcoming 12-month period."
+    }
+  };
+
+  const SIGNOFF_BLOCKS = {
+    renewal: "<strong>Sharon DeJesus, NP, PMHNP</strong><br>Works Connect™ Client Services & Renewal Engine<br>License #123456 | NPI #9988776655",
+    legal: "<strong>Office of Legal Counsel</strong><br>Works Connect™ Legal Compliance Division<br>Bar Roll #887722 | Fax Desk: 929-668-3330",
+    rental: "<strong>Property Management Desk</strong><br>Leasing & Compliance Division<br>Fax Desk: 929-668-3330",
+    clinical: "<strong>Sharon DeJesus, NP, PMHNP</strong><br>Private Practice Center of NY | Compliance Office<br>Lic #123456 | NPI #9988776655",
+    ed: "<strong>Sharon DeJesus, NP, PMHNP</strong><br>Educational & Clinical Advocacy Services<br>License #123456 | NPI #9988776655"
+  };
+
+  // REAL-TIME SYNCHRONIZATION
+  function syncPreview() {
+    const subject = document.getElementById('input-subject').value;
+    const recipient = document.getElementById('input-recipient').value;
+    const body = document.getElementById('input-body').value;
+
+    document.getElementById('prev-subject').innerText = subject || 'Untitled Document';
+    document.getElementById('prev-recipient').innerText = 'To: ' + (recipient || 'Unspecified Recipient');
+    document.getElementById('prev-body').innerText = body;
+  }
+
+  function updateSignoff(key) {
+    document.getElementById('prev-signoff-block').innerHTML = SIGNOFF_BLOCKS[key] || SIGNOFF_BLOCKS['renewal'];
+  }
+
+  function loadSpecialtyPreset(key) {
+    const preset = SPECIALTY_PRESETS[key];
+    if (!preset) return;
+
+    document.getElementById('input-subject').value = preset.subject;
+    document.getElementById('input-recipient').value = preset.recipient;
+    document.getElementById('input-body').value = preset.body;
+    document.getElementById('select-signoff').value = preset.signoff;
+    
+    updateSignoff(preset.signoff);
+    syncPreview();
+    showToast("Loaded " + key.toUpperCase() + " Template Framework");
+  }
+
+  // VIEW SWITCHER
+  function switchMode(mode) {
+    const editor = document.getElementById('mode-editor');
+    const preview = document.getElementById('mode-preview');
+    const queue = document.getElementById('mode-queue');
+
+    const tabEditor = document.getElementById('tab-editor');
+    const tabPreview = document.getElementById('tab-preview');
+    const tabQueue = document.getElementById('tab-queue');
+
+    editor.style.display = 'none';
+    preview.style.display = 'none';
+    queue.style.display = 'none';
+
+    tabEditor.classList.remove('active');
+    tabPreview.classList.remove('active');
+    tabQueue.classList.remove('active');
+
+    if (mode === 'editor') {
+      editor.style.display = 'flex';
+      tabEditor.classList.add('active');
+    } else if (mode === 'preview') {
+      syncPreview();
+      preview.style.display = 'block';
+      tabPreview.classList.add('active');
+    } else if (mode === 'queue') {
+      queue.style.display = 'block';
+      tabQueue.classList.add('active');
+    }
+  }
+
+  // AI ASSISTANT MODAL
+  function toggleAI(show) {
+    const popover = document.getElementById('ai-popover');
+    if (show) popover.classList.add('visible');
+    else popover.classList.remove('visible');
+  }
+
+  function runAIEnhance(type) {
+    const bodyElem = document.getElementById('input-body');
+    if (type === 'formal') {
+      bodyElem.value = "PURSUANT TO LEGAL & COMPLIANCE REVIEW: " + bodyElem.value + " This agreement is executed under binding statutory provisions and valid through the stated expiration date.";
+    } else {
+      bodyElem.value = "Summary Notice: " + bodyElem.value;
+    }
+    toggleAI(false);
+    syncPreview();
+    showToast("AI Assistant Refined Agreement Text");
+  }
+
+  function formatText(style) {
+    showToast("Formatted selection: " + style.toUpperCase());
+  }
+
+  // ASYNCHRONOUS RENEWAL & LAYER 1 API SIMULATION
+  function triggerAsynchronousForm(client, price) {
+    showToast("SMS/Email Async Form sent to " + client + " (" + price + " Promo)");
+  }
+
+  function autoReissueLetter(client) {
+    document.getElementById('input-subject').value = "RENEWAL: Informed Consent & Service Terms";
+    document.getElementById('input-recipient').value = client + " (Annual Compliance Record)";
+    switchMode('editor');
+    showToast("Re-issuing agreement for " + client);
+  }
+
+  function dispatchFaxToSelf() {
+    showToast("Fax dispatched to self: 929-668-3330 (JSON status: QUEUED)");
+  }
+
+  function dispatchSendAndInvoice() {
+    showToast("Agreement sent & $50 Invoice Link created via Telnyx API");
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-message').innerText = msg;
+    toast.classList.add('show');
+    setTimeout(() => {
+      hideToast();
+    }, 3500);
+  }
+
+  function hideToast() {
+    document.getElementById('toast').classList.remove('show');
+  }
+
+  // INITIALIZE ON LOAD
+  window.onload = function() {
+    syncPreview();
+    updateSignoff('renewal');
+  };
+</script>
+</body>
+</html>
